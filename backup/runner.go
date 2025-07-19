@@ -30,12 +30,16 @@ func NewOdooBackup(config OdooBackupConfig) *OdooBackup {
 		log.Fatal("OdooURL and MasterPassword must be set")
 	}
 
+	if config.Namespace == "" {
+		config.Namespace = "default"
+	}
+
 	return &OdooBackup{
 		OdooURL:        config.OdooURL,
 		MasterPassword: config.MasterPassword,
 		Namespace:      config.Namespace,
 		BackupFormat:   "zip",
-		OutputDir:      "/data/odoo-backups",
+		OutputDir:      "/data",
 	}
 }
 
@@ -97,13 +101,13 @@ type Backup struct {
 }
 
 func (o *OdooBackup) ListBackups() ([]Backup, error) {
+	var backups = make([]Backup, 0)
 	fullPath := o.OutputDir
 	files, err := os.ReadDir(fullPath)
 	if err != nil {
 		return nil, fmt.Errorf("error al leer el directorio de backups: %w", err)
 	}
 
-	var backups []Backup
 	for _, file := range files {
 		if file.IsDir() {
 			continue

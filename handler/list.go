@@ -8,7 +8,9 @@ import (
 func (h *Handler) listHandler(w http.ResponseWriter, r *http.Request) {
 	backups, err := h.backup.ListBackups()
 	if err != nil {
-		http.Error(w, "Failed to list backups", http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 
