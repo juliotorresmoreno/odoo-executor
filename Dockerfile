@@ -11,3 +11,6 @@ RUN chmod +x /app/odoo-executor
 
 USER ubuntu
 
+EXPOSE 4080
+
+ENTRYPOINT ["/app/odoo-executor"]

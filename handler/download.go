@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -20,5 +21,5 @@ func (h *Handler) downloadHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Write(data)
+	io.Copy(w, data)
 }

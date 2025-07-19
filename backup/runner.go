@@ -122,7 +122,7 @@ func (o *OdooBackup) ListBackups() ([]Backup, error) {
 	return backups, nil
 }
 
-func (o *OdooBackup) DownloadBackup(fileName string) ([]byte, error) {
+func (o *OdooBackup) DownloadBackup(fileName string) (io.ReadCloser, error) {
 	fullPath := filepath.Join(o.OutputDir, fileName)
 	info, err := os.Stat(fullPath)
 	if err != nil {
@@ -132,12 +132,10 @@ func (o *OdooBackup) DownloadBackup(fileName string) ([]byte, error) {
 		return nil, fmt.Errorf("el archivo '%s' es un directorio, no se puede descargar", fileName)
 	}
 
-	log.Printf("Descargando backup: %s", fullPath)
-
-	data, err := os.ReadFile(fullPath)
+	file, err := os.Open(fullPath)
 	if err != nil {
-		return nil, fmt.Errorf("error al leer el archivo '%s': %w", fileName, err)
+		return nil, fmt.Errorf("error al abrir el archivo '%s': %w", fileName, err)
 	}
 
-	return data, nil
+	return file, nil
 }
