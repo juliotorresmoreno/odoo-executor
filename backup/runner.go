@@ -20,6 +20,7 @@ type OdooBackupConfig struct {
 type OdooBackup struct {
 	OdooURL        string
 	MasterPassword string
+	Namespace      string
 	BackupFormat   string
 	OutputDir      string
 }
@@ -32,6 +33,7 @@ func NewOdooBackup(config OdooBackupConfig) *OdooBackup {
 	return &OdooBackup{
 		OdooURL:        config.OdooURL,
 		MasterPassword: config.MasterPassword,
+		Namespace:      config.Namespace,
 		BackupFormat:   "zip",
 		OutputDir:      "/data/odoo-backups",
 	}
